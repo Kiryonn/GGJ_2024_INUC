@@ -1,0 +1,116 @@
+[gd_scene load_steps=11 format=3 uid="uid://lidaj06ta4db"]
+
+[ext_resource type="Texture2D" uid="uid://b4daj7hp7dp1v" path="res://takodachi/body.png" id="1_dw1sc"]
+[ext_resource type="Script" path="res://takodachi/takodachi.gd" id="1_p2gwq"]
+[ext_resource type="Texture2D" uid="uid://defdv0as7a2y5" path="res://takodachi/ring.png" id="3_6kyck"]
+[ext_resource type="Texture2D" uid="uid://d3oejib4hfxd" path="res://takodachi/legs.png" id="3_eaiaq"]
+[ext_resource type="Texture2D" uid="uid://d1mc44otdpm6l" path="res://items/cookie.png" id="4_3aa47"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6dmd4"]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hyrtu"]
+size = Vector2(30, 30)
+
+[sub_resource type="Animation" id="Animation_cg3h3"]
+resource_name = "idle"
+length = 0.5
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Legs:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_8m8vn"]
+resource_name = "move_right"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Legs:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jy8sh"]
+_data = {
+"idle": SubResource("Animation_cg3h3"),
+"move_right": SubResource("Animation_8m8vn")
+}
+
+[node name="Takodachi" type="CharacterBody2D"]
+script = ExtResource("1_p2gwq")
+
+[node name="Model" type="Node2D" parent="."]
+position = Vector2(0, -3)
+
+[node name="Body" type="Sprite2D" parent="Model"]
+texture = ExtResource("1_dw1sc")
+
+[node name="Ring" type="Sprite2D" parent="Model"]
+position = Vector2(0, -17)
+scale = Vector2(1, 1)
+texture = ExtResource("3_6kyck")
+
+[node name="Legs" type="Sprite2D" parent="Model"]
+texture_repeat = 2
+position = Vector2(0, 13)
+texture = ExtResource("3_eaiaq")
+vframes = 5
+
+[node name="Face" type="Sprite2D" parent="Model"]
+
+[node name="Ears" type="Sprite2D" parent="Model"]
+
+[node name="PhysicCollision" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_6dmd4")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+input_pickable = false
+
+[node name="InteractionCollision" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_hyrtu")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_jy8sh")
+}
+autoplay = "idle"
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Cookies" type="HBoxContainer" parent="UI"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 66.0
+offset_bottom = 52.0
+size_flags_horizontal = 3
+
+[node name="CookieTexture" type="TextureRect" parent="UI/Cookies"]
+layout_mode = 2
+texture = ExtResource("4_3aa47")
+
+[node name="NbCookies" type="Label" parent="UI/Cookies"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[connection signal="area_entered" from="InteractionArea" to="." method="_on_interaction_area_entered"]

@@ -1,0 +1,11 @@
+res://map/map.tscn
+res://map/map_tileset.tres
+res://map/map_tileset_fg.tres
+res://addons/phantom_camera/examples/example_scenes/2D/2DExampleScene.tscn
+res://takodachi/takodachi.tscn
+res://items/cookie.tscn
+res://takodachi/takodachi.gd
+res://items/cookie.gd
+res://ui.tscn
+res://tombstone.tscn
+res://tombstone.gd
